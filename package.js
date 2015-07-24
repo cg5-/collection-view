@@ -1,7 +1,7 @@
 
 Package.describe({
 	summary: "Perform data transformations on cursors without sacrificing fine-grained reactivity.",
-	version: "0.1.0",
+	version: "0.1.1",
 	name: "cg5:collection-view",
 	git: "https://github.com/cg5-/collection-view.git"
 });
