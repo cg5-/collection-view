@@ -84,7 +84,7 @@ The elements in a view must be EJSONable values, and always contain an
 
 Create a View out of a collection or cursor.
 
-### view.filter(<mongo selector> | Object -> Object) -> View
+### view.filter(mongoSelector | Object -> Object) -> View
 
 Filter the view by a predicate, returning a new view. The predicate can be either
 a Mongo-style selector (see Meteor docs), or a function taking a document and returning
@@ -133,7 +133,7 @@ view will have at most one document, summarising the entire input view.
 
 aggregate: object containing aggregated fields to compute. The keys of this object
 are the names of the aggregated fields and the values describe what
-to aggregate. Right now the values can be CV.sum("fieldName") or CV.count,
+to aggregate. Right now the values can be `CV.sum("fieldName")` or `CV.count`,
 or you could write a custom aggregator by implementing a simple interface.
 If this is missing or {}, don't aggregate anything, in effect creating a SELECT DISTINCT.
 
@@ -164,7 +164,7 @@ returning a new view. Not guaranteed to be stable. Most transformation functions
 destroy the order of the view, so it's recommended to call this as the last step
 in the chain.
 
-### view.observe(observeCallbacks) -> void
+### view.observe(observeCallbacks) -> stopper
 
 Much like `observe` in the standard Meteor Cursor.
 Returns an object with a `stop` function that must be called to stop observing;
@@ -185,15 +185,7 @@ The callbacks are run inside the current computation, if there is one.
 Returns the current data set as an array.
 If called from a computation, registers a dependency on the current data set.
 
-### view.forEachNonreactive(Object -> void) -> void
-
-forEachNonreactive(callback)
-Call the callback once for each document in the current data set.
-Unlike `Mongo.Cursor.forEach`, only passes the actual document (not also an index and the view itself).
-Does not register a dependency on the current data set, even if called from inside a reactive computation,
-and the callbacks themselves are not run in a computation.
-
-### view.observeAfter(observeCallbacks) -> void
+### view.observeAfter(observeCallbacks) -> stopper
 
 Much like `observe` in the standard Meteor Cursor, except you don't receive
 the initial data set as `added` callbacks. That is, only changes to the data set which occur
@@ -201,6 +193,13 @@ after this method is called will trigger callbacks.
 Returns an object with a `stop` function that must be called to stop observing;
 if called inside a computation, it will automatically be stopped when the computation is invalidated.
 None of the callbacks are run inside a computation.
+
+### view.forEachNonreactive(Object -> void) -> void
+
+Call the callback once for each document in the current data set.
+Unlike `Mongo.Cursor.forEach`, only passes the actual document (not also an index and the view itself).
+Does not register a dependency on the current data set, even if called from inside a reactive computation,
+and the callbacks themselves are not run in a computation.
 
 # Future considerations
 
