@@ -147,7 +147,7 @@ For example, `CV.sum` is implemented as:
 		return {
 			initial: function (doc) { return doc[fieldName]; },
 			add: function (total, doc) { return total + doc[fieldName]; },
-			subtract: function (total, doc) { total - doc[fieldName]; }
+			subtract: function (total, doc) { return total - doc[fieldName]; }
 		};
 	};
 
@@ -170,7 +170,7 @@ Much like `observe` in the standard Meteor Cursor.
 Returns an object with a `stop` function that must be called to stop observing;
 if called inside a computation, it will automatically be stopped when the computation is invalidated.
 Like `Mongo.Cursor.observe`, the initial data set will be provided as synchronous added callbacks.
-None of the callbacks are run inside a computation. This is intentionally different from Mongo.Cursor.observe,
+None of the callbacks are run inside a computation. This is intentionally different from `Mongo.Cursor.observe`,
 which runs the initial "added" callbacks in a computation, but not any subsequent callbacks.
 
 ### view.forEach(Object -> void) -> void
@@ -203,6 +203,8 @@ if called inside a computation, it will automatically be stopped when the comput
 None of the callbacks are run inside a computation.
 
 # Future considerations
+
+Much functionality is missing:
 
 * Versions of `fmap`/`addFields`/`filter` where the mapper/predicate function can access arbitrary reactive
   state. An autorun would have to be created for each element.
